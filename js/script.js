@@ -38,7 +38,7 @@ window.tailwind.config = {
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-XXXXXXXXXX');
+gtag('config', 'G-5DVW523L5V');
 
 /* 3) Meta Pixel */
 !function(f,b,e,v,n,t,s)
