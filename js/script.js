@@ -98,66 +98,138 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* --- Booking scroll / selection + WhatsApp + analytics --- */
-  const bookButtons = document.querySelectorAll('.book-btn');
-  const plotSelect = document.getElementById('plot-size');
-  const bookingForm = document.getElementById('booking-form');
-  const whatsappLinks = document.querySelectorAll('.whatsapp-btn, a[href*="wa.me"]');
+      /* --- Show Your Interest custom dropdown --- */
+      const interestToggleBtn = document.getElementById('interest-toggle-btn');
+      const interestDropdown = document.getElementById('interest-dropdown');
+      const interestChevron = document.getElementById('interest-chevron');
+      const interestSelectedLabel = document.getElementById('interest-selected-label');
+      const interestOptions = document.querySelectorAll('.interest-option');
 
-  // Track WhatsApp link clicks
-  whatsappLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (typeof fbq === 'function') {
-        fbq('track', 'Contact', { content_name: 'WhatsApp Click' });
+      const interestTextMap = {
+        'invest': 'Investment & Resale Profit',
+        'build': 'Build My Dream Home',
+        'site-visit': 'Book a Site Visit',
+        'installments': '3-Year Installment Plan',
+        'payment-details': 'Get Detailed Payment Plan'
+      };
+
+      function setInterestExpanded(expanded) {
+        if (!interestDropdown || !interestChevron || !interestToggleBtn) return;
+        interestDropdown.classList.toggle('hidden', !expanded);
+        interestToggleBtn.setAttribute('aria-expanded', String(expanded));
+        interestChevron.style.transform = expanded ? 'rotate(180deg)' : 'rotate(0deg)';
+        if (expanded) {
+          interestToggleBtn.classList.add('border-emerald-600', 'ring-2', 'ring-emerald-500/30');
+        } else {
+          interestToggleBtn.classList.remove('border-emerald-600', 'ring-2', 'ring-emerald-500/30');
+        }
       }
-      if (typeof gtag === 'function') {
-        gtag('event', 'whatsapp_inquiry', {
-          event_category: 'Leads',
-          event_label: 'WhatsApp Contact'
+
+      if (interestToggleBtn && interestDropdown) {
+        interestToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = !interestDropdown.classList.contains('hidden');
+          setInterestExpanded(!isOpen);
+        });
+
+        interestOptions.forEach(option => {
+          option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const interestKey = option.getAttribute('data-interest');
+            const interestText = interestTextMap[interestKey] || interestKey;
+
+            // Update button label to show the chosen interest
+            if (interestSelectedLabel) {
+              interestSelectedLabel.textContent = interestText;
+              interestSelectedLabel.classList.remove('text-slate-400');
+              interestSelectedLabel.classList.add('text-emerald-800', 'font-bold');
+            }
+            interestOptions.forEach(o => o.classList.remove('bg-emerald-50', 'text-emerald-800'));
+            option.classList.add('bg-emerald-50', 'text-emerald-800');
+            setInterestExpanded(false);
+
+            // GA4 + Meta Pixel tracking for the interest selection
+            if (typeof gtag === 'function') {
+              gtag('event', 'select_interest', {
+                event_category: 'Booking Form',
+                event_label: interestText
+              });
+            }
+            if (typeof fbq === 'function') {
+              fbq('trackCustom', 'SelectInterest', { interest: interestText });
+            }
+          });
+        });
+
+        // Close dropdown when clicking anywhere else on the page
+        document.addEventListener('click', (e) => {
+          if (!interestDropdown.contains(e.target) && e.target !== interestToggleBtn) {
+            setInterestExpanded(false);
+          }
         });
       }
-    });
-  });
 
-  bookButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const plotValue = btn.getAttribute('data-plot');
-      if (plotValue && plotSelect) {
-        plotSelect.value = plotValue;
-      }
+      /* --- Booking scroll / selection + WhatsApp + analytics --- */
+      const bookButtons = document.querySelectorAll('.book-btn');
+      const plotSelect = document.getElementById('plot-size');
+      const bookingForm = document.getElementById('booking-form');
+      const whatsappLinks = document.querySelectorAll('.whatsapp-btn, a[href*="wa.me"]');
+
+      // Track WhatsApp link clicks
+      whatsappLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (typeof fbq === 'function') {
+            fbq('track', 'Contact', { content_name: 'WhatsApp Click' });
+          }
+          if (typeof gtag === 'function') {
+            gtag('event', 'whatsapp_inquiry', {
+              event_category: 'Leads',
+              event_label: 'WhatsApp Contact'
+            });
+          }
+        });
+      });
+
+      bookButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const plotValue = btn.getAttribute('data-plot');
+          if (plotValue && plotSelect) {
+            plotSelect.value = plotValue;
+          }
+          if (bookingForm) {
+            bookingForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      });
+
       if (bookingForm) {
-        bookingForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-  });
+        bookingForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('full-name')?.value || '';
+          const phone = document.getElementById('phone-number')?.value || '';
+          const plotElem = document.getElementById('plot-size');
+          const plotValue = plotElem ? plotElem.value : 'unspecified';
+          const plotText = plotElem ? plotElem.options[plotElem.selectedIndex]?.text : '';
+          const inquiries = document.getElementById('query-message')?.value || 'None';
+          const chosenInterest = (interestSelectedLabel && interestSelectedLabel.textContent !== 'Tap here to choose your interest...') ? interestSelectedLabel.textContent : 'unspecified';
 
-  if (bookingForm) {
-    bookingForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('full-name')?.value || '';
-      const phone = document.getElementById('phone-number')?.value || '';
-      const plotElem = document.getElementById('plot-size');
-      const plotValue = plotElem ? plotElem.value : 'unspecified';
-      const plotText = plotElem ? plotElem.options[plotElem.selectedIndex]?.text : '';
-      const inquiries = document.getElementById('query-message')?.value || 'None';
+          // Fire Meta Pixel and GA4 conversion tracking events
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead', {
+              content_category: 'Plot Reservation',
+              content_name: plotValue
+            });
+          }
+          if (typeof gtag === 'function') {
+            gtag('event', 'generate_lead', {
+              event_category: 'Inquiry Form',
+              event_label: plotValue
+            });
+          }
 
-      // Fire Meta Pixel and GA4 conversion tracking events
-      if (typeof fbq === 'function') {
-        fbq('track', 'Lead', {
-          content_category: 'Plot Reservation',
-          content_name: plotValue
+          const message = `New Priority Booking Inquiry - Bin Suleman Etihad Town Phase 4:\nName: ${name}\nPhone: ${phone}\nPlot Interest: ${plotText}\nInterest: ${chosenInterest}\nInquiry Notes: ${inquiries}`;
+          const waUrl = `https://wa.me/923014736155?text=${encodeURIComponent(message)}`;
+          window.open(waUrl, '_blank');
         });
       }
-      if (typeof gtag === 'function') {
-        gtag('event', 'generate_lead', {
-          event_category: 'Inquiry Form',
-          event_label: plotValue
-        });
-      }
-
-      const message = `New Priority Booking Inquiry - Bin Suleman Etihad Town Phase 4:\nName: ${name}\nPhone: ${phone}\nPlot Interest: ${plotText}\nInquiry Notes: ${inquiries}`;
-      const waUrl = `https://wa.me/923014736155?text=${encodeURIComponent(message)}`;
-      window.open(waUrl, '_blank');
     });
-  }
-});

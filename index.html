@@ -580,6 +580,42 @@
 </div>
 </div>
 </div>
+<!-- Show Your Interest - custom toggle dropdown -->
+<div>
+<span class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 font-mono">Show Your Interest <span class="text-emerald-700 font-bold">*</span></span>
+<button aria-expanded="false" aria-haspopup="listbox" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 font-medium focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/30 cursor-pointer transition shadow-inner text-left flex items-center justify-between hover:border-emerald-500/60" id="interest-toggle-btn" type="button">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 fill-none stroke-emerald-600" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="text-slate-400" id="interest-selected-label">Tap here to choose your interest...</span>
+</span>
+<svg class="w-5 h-5 fill-current text-emerald-700 transition-transform duration-300" id="interest-chevron" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" fill-rule="evenodd"></path></svg>
+</button>
+<!-- Dropdown menu -->
+<div class="hidden mt-2 w-full bg-white border border-emerald-500/30 rounded-xl shadow-2xl overflow-hidden z-30" id="interest-dropdown">
+<div role="listbox" aria-label="Select your interest">
+<button class="interest-option w-full px-4 py-3 text-left text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 font-medium flex items-center gap-2.5 border-b border-slate-100 transition" data-interest="invest" role="option" type="button">
+<svg class="w-4 h-4 fill-none stroke-emerald-600" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Investment &amp; Resale Profit</span>
+</button>
+<button class="interest-option w-full px-4 py-3 text-left text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 font-medium flex items-center gap-2.5 border-b border-slate-100 transition" data-interest="build" role="option" type="button">
+<svg class="w-4 h-4 fill-none stroke-emerald-600" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11v10a1 1 0 01-1 1h-3m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Build My Dream Home</span>
+</button>
+<button class="interest-option w-full px-4 py-3 text-left text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 font-medium flex items-center gap-2.5 border-b border-slate-100 transition" data-interest="site-visit" role="option" type="button">
+<svg class="w-4 h-4 fill-none stroke-emerald-600" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Book a Site Visit</span>
+</button>
+<button class="interest-option w-full px-4 py-3 text-left text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 font-medium flex items-center gap-2.5 border-b border-slate-100 transition" data-interest="installments" role="option" type="button">
+<svg class="w-4 h-4 fill-none stroke-emerald-600" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>3-Year Installment Plan</span>
+</button>
+<button class="interest-option w-full px-4 py-3 text-left text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 font-medium flex items-center gap-2.5 transition" data-interest="payment-details" role="option" type="button">
+<svg class="w-4 h-4 fill-none stroke-emerald-600" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3-3 2 2 2-2 2 2 2-2 3 3z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Get Detailed Payment Plan</span>
+</button>
+</div>
+</div>
+</div>
 <div>
 <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 font-mono" for="query-message">Inquiry Notes (Optional)</label>
 <textarea class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/30 transition shadow-inner" id="query-message" placeholder="Preferred plot orientation, site visit appointment date, or installment structure..." rows="3"></textarea>
