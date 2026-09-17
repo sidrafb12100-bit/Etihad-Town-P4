@@ -21,11 +21,11 @@ window.tailwind.config = {
         surface: "#F8F9FA",
         "surface-warm": "#FAF9F5",
         "surface-card": "#FFFFFF",
-        "brand-emerald": "#16a34a",
-        "brand-emerald-dark": "#15803d",
-        "brand-lime": "#16a34a",
-        "emerald-glow": "#22c55e",
-        "border-subtle": "rgba(22, 163, 74, 0.18)"
+        "brand-gold": "#d97706",
+        "brand-gold-dark": "#b45309",
+        "brand-gold-light": "#fbbf24",
+        "gold-glow": "#f59e0b",
+        "border-subtle": "rgba(217, 119, 6, 0.18)"
       },
       fontFamily: {
         editorial: ["Cinzel", "Montserrat", "serif"],
@@ -119,9 +119,9 @@ document.addEventListener('DOMContentLoaded', function () {
         interestToggleBtn.setAttribute('aria-expanded', String(expanded));
         interestChevron.style.transform = expanded ? 'rotate(180deg)' : 'rotate(0deg)';
         if (expanded) {
-          interestToggleBtn.classList.add('border-emerald-600', 'ring-2', 'ring-emerald-500/30');
+          interestToggleBtn.classList.add('border-amber-600', 'ring-2', 'ring-amber-500/30');
         } else {
-          interestToggleBtn.classList.remove('border-emerald-600', 'ring-2', 'ring-emerald-500/30');
+          interestToggleBtn.classList.remove('border-amber-600', 'ring-2', 'ring-amber-500/30');
         }
       }
 
@@ -142,10 +142,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (interestSelectedLabel) {
               interestSelectedLabel.textContent = interestText;
               interestSelectedLabel.classList.remove('text-slate-400');
-              interestSelectedLabel.classList.add('text-emerald-800', 'font-bold');
+              interestSelectedLabel.classList.add('text-amber-800', 'font-bold');
             }
-            interestOptions.forEach(o => o.classList.remove('bg-emerald-50', 'text-emerald-800'));
-            option.classList.add('bg-emerald-50', 'text-emerald-800');
+            interestOptions.forEach(o => o.classList.remove('bg-amber-50', 'text-amber-800'));
+            option.classList.add('bg-amber-50', 'text-amber-800');
             setInterestExpanded(false);
 
             // GA4 + Meta Pixel tracking for the interest selection
